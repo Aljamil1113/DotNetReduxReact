@@ -19,7 +19,7 @@ namespace RestoreAPI.Controllers
             return BadRequest("This is a bad request.");
         }
 
-        [HttpGet("unauthorirised")]
+        [HttpGet("unauthorised")]
         public ActionResult GetUnauthorised()
         {
             return Unauthorized();
