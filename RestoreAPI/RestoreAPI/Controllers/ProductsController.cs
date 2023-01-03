@@ -26,7 +26,11 @@ namespace RestoreAPI.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Product>> GetProduct(int id)
         {
-            return await context.Products.FindAsync(id);
+            var product = await context.Products.FindAsync(id);
+
+            if(product == null) return NotFound();
+
+            return product;
         }
     }
 }
