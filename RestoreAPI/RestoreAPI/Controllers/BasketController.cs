@@ -63,8 +63,10 @@ namespace RestoreAPI.Controllers
 
         private async Task<Basket> RetrieveBasket()
         {
-            return await context.Baskets.Include(i => i.Items).ThenInclude(p => p.Product)
-                            .FirstOrDefaultAsync(x => x.BuyerId == Request.Cookies["buyerId"]);
+            var bt = await context.Baskets.Include(i => i.Items).ThenInclude(p => p.Product)
+                            .FirstOrDefaultAsync();
+            //x => x.BuyerId == Request.Cookies["buyerId"]
+            return bt;
         }
 
         private Basket? CreateBasket()
