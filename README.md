@@ -20,3 +20,7 @@ npm install react-toastify
 npm install @mui/lab
 
 json2ts.com
+
+# REDUX
+npm install redux react-redux
+npm install @reduxjs/toolkit
