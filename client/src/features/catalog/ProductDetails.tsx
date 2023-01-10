@@ -3,17 +3,19 @@ import { Divider, Grid, Table, TableBody, TableCell, TableContainer, TableRow, T
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import agent from "../../app/api/agent";
-import { useStoreContext } from "../../app/context/StoreContext";
 import NotFound from "../../app/errors/NotFound";
 import LoadingComponent from "../../app/layout/LoadingComponent";
 import { Product } from "../../app/models/products";
+import { useAppDispatch, useAppSelector } from "../../app/store/configureStore";
+import { removeItem, setBasket } from "../basket/basketSlice";
 
 export default function ProductDetails() {
     const {id} = useParams<{id: any}>();
     const [product, setProduct] = useState<Product | null>(null);
     const [loading, setLoading] = useState(true);
 
-    const {basket, setBasket, removeItem} = useStoreContext();
+    const {basket} = useAppSelector(state => state.basket);
+    const dispatch = useAppDispatch();
     const [quantity, setQuantity] = useState(0);
     const [submitting, setSubmitting] = useState(false);
     const item = basket?.items.find(i => i.productId === product?.id); 
@@ -37,14 +39,14 @@ export default function ProductDetails() {
         if(!item || quantity > item.quantity) {
             const updateQuantity = item ? quantity - item.quantity : quantity;
             agent.Basket.addItem(product?.id!, updateQuantity)
-            .then(basket => setBasket(basket))
+            .then(basket => dispatch(setBasket(basket)))
             .catch(error => console.log(error))
             .finally(() => setSubmitting(false))
         }
         else {
             const updateQuantity = item.quantity - quantity;
             agent.Basket.removeItem(product?.id!, updateQuantity)
-            .then(() => removeItem(product?.id!, updateQuantity))
+            .then(() => dispatch(removeItem({productId: product?.id!, quantity: updateQuantity})))
             .catch(error => console.log(error))
             .finally(() => setSubmitting(false))
 
