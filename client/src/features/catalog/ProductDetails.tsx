@@ -7,17 +7,16 @@ import NotFound from "../../app/errors/NotFound";
 import LoadingComponent from "../../app/layout/LoadingComponent";
 import { Product } from "../../app/models/products";
 import { useAppDispatch, useAppSelector } from "../../app/store/configureStore";
-import { removeItem, setBasket } from "../basket/basketSlice";
+import { addBasketItemAsync, removeBasketItemAsync } from "../basket/basketSlice";
 
 export default function ProductDetails() {
     const {id} = useParams<{id: any}>();
     const [product, setProduct] = useState<Product | null>(null);
     const [loading, setLoading] = useState(true);
 
-    const {basket} = useAppSelector(state => state.basket);
+    const {basket, status} = useAppSelector(state => state.basket);
     const dispatch = useAppDispatch();
     const [quantity, setQuantity] = useState(0);
-    const [submitting, setSubmitting] = useState(false);
     const item = basket?.items.find(i => i.productId === product?.id); 
 
     useEffect(() => {
@@ -35,20 +34,13 @@ export default function ProductDetails() {
     }
 
     function handleUpdateCart() {
-        setSubmitting(true);
         if(!item || quantity > item.quantity) {
-            const updateQuantity = item ? quantity - item.quantity : quantity;
-            agent.Basket.addItem(product?.id!, updateQuantity)
-            .then(basket => dispatch(setBasket(basket)))
-            .catch(error => console.log(error))
-            .finally(() => setSubmitting(false))
+            const updatedQuantity = item ? quantity - item.quantity : quantity;
+            dispatch(addBasketItemAsync({productId: product?.id!, quantity: updatedQuantity}))
         }
         else {
             const updateQuantity = item.quantity - quantity;
-            agent.Basket.removeItem(product?.id!, updateQuantity)
-            .then(() => dispatch(removeItem({productId: product?.id!, quantity: updateQuantity})))
-            .catch(error => console.log(error))
-            .finally(() => setSubmitting(false))
+            dispatch(removeBasketItemAsync({productId: product?.id!, quantity: updateQuantity}))
 
         }
     }
@@ -106,7 +98,7 @@ export default function ProductDetails() {
                     <Grid item xs={6}>
                     <LoadingButton
                         disabled={(item?.quantity === quantity) || (!item) && (quantity === 0)} 
-                        loading={submitting}
+                        loading={status.includes('pending' + item?.productId)}
                         onClick={handleUpdateCart}
                         sx={{height: '55px'}} color='primary' size='large' variant='contained' fullWidth>
                         {item ? 'Update Quantity' : 'Add to Cart'}
