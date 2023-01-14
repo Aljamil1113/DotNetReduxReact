@@ -19,7 +19,7 @@ namespace RestoreAPI.Controllers
         [HttpGet(Name = "GetBasket")]
         public async Task<ActionResult<BasketDto>> GetBasket()
         {
-            var basket = await RetrieveBasket();
+            var basket = await RetrieveBasket(); 
 
             if (basket == null) return NotFound();
             return MapBasketToDto(basket);
@@ -31,7 +31,9 @@ namespace RestoreAPI.Controllers
             var basket = await RetrieveBasket();
             if (basket == null) basket = CreateBasket();
             var product = await context.Products.FindAsync(productId);
-            if(product == null) return NotFound();
+
+            if(product == null) return BadRequest(new ProblemDetails {  Title = "Product not found."});
+
             basket.AddItem(product, quantity);
             var result = await context.SaveChangesAsync() > 0;
 
