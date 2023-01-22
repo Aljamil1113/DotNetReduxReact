@@ -3,13 +3,11 @@ import ReactDOM from 'react-dom/client';
 import './app/layout/styles.css';
 import App from './app/layout/App';
 import reportWebVitals from './reportWebVitals';
-import { Router} from 'react-router-dom';
-import { createBrowserHistory } from "history";
+import history from './app/util/history';
 import { Provider } from 'react-redux';
 import { store } from './app/store/configureStore';
 import { fetchProductsAsync } from './features/catalog/CatalogSlice';
-
-export const history = createBrowserHistory();
+import { BrowserRouter } from 'react-router-dom';
 
 store.dispatch(fetchProductsAsync());
 
@@ -18,11 +16,11 @@ const root = ReactDOM.createRoot(
 );
 root.render(
   <React.StrictMode>
-    <Router history={history}>
-        <Provider store={store}>
+    <BrowserRouter>
+    <Provider store={store}>
           <App />
-        </Provider>
-    </Router>
+    </Provider>
+    </BrowserRouter>
   </React.StrictMode>
 );
 

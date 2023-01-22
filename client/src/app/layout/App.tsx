@@ -1,7 +1,7 @@
 import { createTheme, CssBaseline, ThemeProvider } from '@mui/material';
 import { Container } from '@mui/system';
 import React, { useEffect, useState } from 'react';
-import { Route, Switch } from 'react-router-dom';
+import { Route, Routes} from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import AboutPage from '../../features/about/AboutPage';
 import Catalog from '../../features/catalog/Catalog';
@@ -60,17 +60,17 @@ function App() {
         <CssBaseline />
         <Header darkMode={darkMode} handleThemeChange={handleThemeChange}/>       
         <Container>
-        <Switch>
-          <Route exact path='/' component={HomePage} />
-            <Route exact path='/catalog'  component={Catalog} />
-            <Route path='/catalog/:id' component={ProductDetails}  />
-            <Route path='/about' component={AboutPage} />
-            <Route path='/contact' component={ContactPage} />
-            <Route path='/server-error' component={ServerError} />
-            <Route path='/basket' component={BasketPage} />
-            <Route path='/checkout' component={CheckoutPage} />
-            <Route component={NotFound} />
-          </Switch>
+          <Routes>
+          <Route path='/' element={ <HomePage /> } />
+            <Route path='/catalog'  element={ <Catalog /> } />
+            <Route path='/catalog/:id' element={ <ProductDetails /> }  />
+            <Route path='/about' element={ <AboutPage /> } />
+            <Route path='/contact' element = { <ContactPage />} />
+            <Route path='/server-error' element={ <ServerError /> } />
+            <Route path='/basket' element={ <BasketPage /> }/>
+            <Route path='/checkout' element={ <CheckoutPage /> } />
+            <Route element={<NotFound />} />
+          </Routes>
         </Container>
     </ThemeProvider>
   );

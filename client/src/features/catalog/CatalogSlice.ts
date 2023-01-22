@@ -21,7 +21,7 @@ function getAxiosParams(productParams: ProductParams) {
     params.append('orderBy', productParams.orderBy);
     if (productParams.searchTerm) params.append('searchTerm', productParams.searchTerm);
     if (productParams.brands.length > 0) params.append('brand', productParams.brands.toString());
-    if(productParams.types.length > 0) params.append('types', productParams.types.toString());
+    if(productParams.types.length > 0 ) params.append('types', productParams.types.toString());
     return params;
 }
 
@@ -33,7 +33,7 @@ export const fetchProductsAsync = createAsyncThunk<Product[], void, {state: Root
         const params = getAxiosParams(thunkAPI.getState().catalog.productParams);
         try {
             const response = await agent.Catalog.list(params);
-            thunkAPI.dispatch(setMetaData(response.meteData));
+            thunkAPI.dispatch(setMetaData(response.metaData));
             return response.items;
         }
         catch(error: any) {

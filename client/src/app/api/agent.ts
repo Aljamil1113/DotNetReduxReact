@@ -1,12 +1,14 @@
 import axios, { AxiosError, AxiosResponse } from "axios";
+import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { history } from "../..";
 import { PaginatedResponse } from "../models/pagination";
 
 const sleep = () => new Promise(resolve => setTimeout(resolve, 1000));
 
 axios.defaults.baseURL = 'https://localhost:7280/api/';
 axios.defaults.withCredentials = true;
+
+//const navigate = useNavigate();
 
 const responseBody = (response: AxiosResponse) => response.data;
 
@@ -22,7 +24,7 @@ axios.interceptors.response.use(async response => {
     const {data, status}: any = error.response!;
     switch(status) {
         case 400:
-            if(data.errors) {
+            if(data.errors) { 
                 const modelStateErrors: string[] = [];
                 for(const key in data.errors) {
                     if(data.errors[key]) {
@@ -40,16 +42,14 @@ axios.interceptors.response.use(async response => {
            toast.error(data.title);
            break;
         case 500:
-            history.push({
-                pathname: '/server-error',
-                state: {error: data}
-            });
+            //navigate('/server-error', { state: {error: data}});
+            window.location.href = '/server-error';
             break;
         default:
             break;
     }
     return Promise.reject(error.response);
-})
+});
 
 const requests = {
     get: (url: string, params?: URLSearchParams) => axios.get(url, {params}).then(responseBody),
