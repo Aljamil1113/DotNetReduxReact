@@ -1,6 +1,6 @@
 import { createTheme, CssBaseline, ThemeProvider } from '@mui/material';
 import { Container } from '@mui/system';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Route, Routes} from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import AboutPage from '../../features/about/AboutPage';
@@ -13,28 +13,31 @@ import 'react-toastify/dist/ReactToastify.css';
 import ServerError from '../errors/ServerError';
 import NotFound from '../errors/NotFound';
 import BasketPage from '../../features/basket/BasketPage';
-import { getCookie } from '../util/util';
-import agent from '../api/agent';
 import LoadingComponent from './LoadingComponent';
 import CheckoutPage from '../../features/checkout/CheckoutPage';
 import { useAppDispatch } from '../store/configureStore';
-import { setBasket } from '../../features/basket/basketSlice';
+import { fetchBasketAsync, setBasket } from '../../features/basket/basketSlice';
+import Register from '../../features/account/Register';
+import Login from '../../features/account/Login';
+import { fetchCurrentUser } from '../../features/account/accountSlice';
 
 function App() {
   const dispatch = useAppDispatch();
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const buyerId = getCookie('buyerId');
-    if(buyerId) {
-      agent.Basket.get()
-      .then(basket => dispatch( setBasket(basket)))
-      .catch(error => console.log(error))
-      .finally(() => setLoading(false));
-    } else {
-      setLoading(false);
+ const initApp = useCallback (async () => {
+    try {
+      await dispatch(fetchCurrentUser());
+      await dispatch(fetchBasketAsync());
+    }
+    catch(error) {
+      console.log(error);
     }
   }, [dispatch])
+
+  useEffect(() => {
+   initApp().then(() => setLoading(false));
+  }, [initApp])
 
   const [darkMode, setDarkMode] = useState(false);
   const paletteType = darkMode ? 'dark' : 'light';
@@ -69,6 +72,8 @@ function App() {
             <Route path='/server-error' element={ <ServerError /> } />
             <Route path='/basket' element={ <BasketPage /> }/>
             <Route path='/checkout' element={ <CheckoutPage /> } />
+            <Route path='/login' element={ <Login /> } />
+            <Route path='/register' element={ <Register /> } />
             <Route element={<NotFound />} />
           </Routes>
         </Container>

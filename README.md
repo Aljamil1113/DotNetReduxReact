@@ -24,3 +24,8 @@ json2ts.com
 # REDUX
 npm install redux react-redux
 npm install @reduxjs/toolkit
+
+# FORM
+npm install react-hook-form 
+
+regexlib.com

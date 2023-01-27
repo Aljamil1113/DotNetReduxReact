@@ -1,16 +1,24 @@
-import axios, { AxiosError, AxiosResponse } from "axios";
+import axios, { AxiosError, AxiosHeaders, AxiosResponse } from "axios";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { PaginatedResponse } from "../models/pagination";
+import { store } from "../store/configureStore";
 
 const sleep = () => new Promise(resolve => setTimeout(resolve, 1000));
 
 axios.defaults.baseURL = 'https://localhost:7280/api/';
 axios.defaults.withCredentials = true;
 
-//const navigate = useNavigate();
-
 const responseBody = (response: AxiosResponse) => response.data;
+
+axios.interceptors.request.use(config => {
+    const token = store.getState().account.user?.token;
+    config.headers = { ...config.headers } as AxiosHeaders;
+    if (token) {
+        config.headers?.set('Authorization', `Bearer ${token}`);
+    } 
+    return config;
+}, (error) => console.log(error))
 
 axios.interceptors.response.use(async response => {
     await sleep();
@@ -42,8 +50,8 @@ axios.interceptors.response.use(async response => {
            toast.error(data.title);
            break;
         case 500:
-            //navigate('/server-error', { state: {error: data}});
-            window.location.href = '/server-error';
+            const navigate = useNavigate();
+            navigate('/server-error', { state: {error: data}});
             break;
         default:
             break;
@@ -78,10 +86,17 @@ const Basket = {
     removeItem: (productId: number, quantity = 1) => requests.delete(`basket?productId=${productId}&quantity=${quantity}`, {})
 }
 
+const Account = {
+    login: (values: any) => requests.post('account/login', values),
+    register: (values: any) => requests.post('account/register', values),
+    currentUser: () => requests.get('account/currentUser'),
+}
+
 const agent = {
     Catalog,
     TestErrors,
-    Basket
+    Basket,
+    Account
 }
 
 export default agent;
