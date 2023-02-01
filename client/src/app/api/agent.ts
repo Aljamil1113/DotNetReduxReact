@@ -1,6 +1,6 @@
-import axios, { AxiosError, AxiosHeaders, AxiosResponse } from "axios";
-import { useNavigate } from "react-router-dom";
+import axios, { AxiosError, AxiosResponse } from "axios";
 import { toast } from "react-toastify";
+import { history } from "../..";
 import { PaginatedResponse } from "../models/pagination";
 import { store } from "../store/configureStore";
 
@@ -13,7 +13,6 @@ const responseBody = (response: AxiosResponse) => response.data;
 
 axios.interceptors.request.use(config => {
     const token = store.getState().account.user?.token;
-    config.headers = { ...config.headers } as AxiosHeaders;
     if (token) {
         config.headers?.set('Authorization', `Bearer ${token}`);
     } 
@@ -50,8 +49,10 @@ axios.interceptors.response.use(async response => {
            toast.error(data.title);
            break;
         case 500:
-            const navigate = useNavigate();
-            navigate('/server-error', { state: {error: data}});
+            history.push({
+                pathname: '/server-error',
+                state: {error: data}
+            });
             break;
         default:
             break;

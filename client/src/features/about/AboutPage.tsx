@@ -1,6 +1,5 @@
-import { Alert, AlertTitle, Button, ButtonGroup, List, ListItem, ListItemText, Typography } from "@mui/material";
-import { Container } from "@mui/system";
-import { useState } from "react";
+import { Alert, AlertTitle, Button, ButtonGroup, Container, List, ListItem, ListItemText, Typography } from "@mui/material";
+import React, {useState}  from 'react';
 import agent from "../../app/api/agent";
 
 export default function AboutPage() {
@@ -9,7 +8,7 @@ export default function AboutPage() {
     function getValidationError() {
         agent.TestErrors.getValidationError()
         .then(() => console.log('Should not see this'))
-        .catch(error => setValidationErrors(error));
+        .catch( (error: any) => setValidationErrors(error));
     }
     return (
         <Container>

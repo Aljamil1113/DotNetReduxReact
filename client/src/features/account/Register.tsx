@@ -1,12 +1,12 @@
 import { LoadingButton } from "@mui/lab";
-import { Avatar, Box, Container, Grid, Link, Paper, TextField, Typography } from "@mui/material";
+import { Avatar, Box, Container, Grid,  Paper, TextField, Typography } from "@mui/material";
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
+import { Link, useHistory } from 'react-router-dom';
 import { toast } from "react-toastify";
 import agent from "../../app/api/agent";
 
 export default function Register() {
-    const navigate = useNavigate();
+    const history = useHistory();
     const {register, handleSubmit, setError, formState: {isSubmitting, errors, isValid}} = useForm({
      mode: 'all'
      });
@@ -38,7 +38,7 @@ export default function Register() {
                 agent.Account.register(data)
                 .then(() => {
                     toast.success('Registration successful - you can now login');
-                    navigate('/login');
+                    history.push('/login');
                 })
                 .catch(error => handleAPIErrors(error)) )}
                 noValidate sx={{ mt: 1 }}
@@ -75,10 +75,10 @@ export default function Register() {
                     type="password"
                     {...register('password', {
                         required: 'Password is required',
-                        pattern: {
-                            value: /(?=^.{6,10}$)(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&amp;*()_+}{&quot;:;'?/&gt;.&lt;,])(?!.*\s).*$ /,
-                            message: 'Password does not meet complexity requirements'
-                        } 
+                        // pattern: {
+                        //     value: /(?=^.{6,10}$)(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&amp;*()_+}{&quot;:;'?/&gt;.&lt;,])(?!.*\s).*$ /,
+                        //     message: 'Password does not meet complexity requirements'
+                        // } 
                         }
                     )}
                     error={!!errors.password}
@@ -95,8 +95,8 @@ export default function Register() {
             </LoadingButton>
                 <Grid container>
                     <Grid item>
-                        <Link>
-                            
+                    <Link to='/login'>
+                            {"Already have an account? Sign In"}
                         </Link>
                     </Grid>
                 </Grid>

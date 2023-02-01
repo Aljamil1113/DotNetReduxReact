@@ -1,13 +1,14 @@
 import { LoadingButton } from "@mui/lab";
-import { Avatar, Box, Container, Grid, Link, Paper, TextField, Typography } from "@mui/material";
+import { Avatar, Box, Container, Grid, Paper, TextField, Typography } from "@mui/material";
 import { FieldValues, useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
-import agent from "../../app/api/agent";
+import { useHistory} from "react-router";
+import { Link , useLocation } from "react-router-dom";
 import { useAppDispatch } from "../../app/store/configureStore";
 import { signInUser } from "./accountSlice";
 
 export default function Login() {
-    const navigate = useNavigate();
+    const history = useHistory();
+    const location = useLocation<any>();
     const dispatch = useAppDispatch();
 
    const {register, handleSubmit, formState: {isSubmitting, errors, isValid}} = useForm({
@@ -15,8 +16,13 @@ export default function Login() {
    });
 
    async function submitForm(data: FieldValues) {
-        await dispatch(signInUser(data));
-        navigate('/catalog'); 
+        try {
+            await dispatch(signInUser(data));
+            history.push(location.state?.from?.pathname ||  '/catalog');
+        } catch (error) {
+            console.log(error);
+        }
+        
    }
 
     return (
@@ -57,7 +63,7 @@ export default function Login() {
             </LoadingButton>
             <Grid container>
                 <Grid item>
-                    <Link href="/register">
+                    <Link to="/register">
                         {"Don't have an account? Sign Up"}
                     </Link>
                 </Grid>

@@ -1,5 +1,4 @@
-import { Button, Divider, Paper, Typography } from "@mui/material";
-import { Container } from "@mui/system";
+import { Button, Container, Divider, Paper, Typography } from "@mui/material";
 
 export default function NotFound() {
     return (

@@ -1,7 +1,7 @@
 import { Button, Link, Menu, MenuItem } from "@mui/material";
 import React from "react";
-import { useNavigate } from "react-router-dom";
 import { signOut } from "../../features/account/accountSlice";
+import { clearBasket } from "../../features/basket/basketSlice";
 import { useAppDispatch, useAppSelector } from "../store/configureStore";
 
 export default function SignedInMenu() {
@@ -15,7 +15,6 @@ export default function SignedInMenu() {
     const handleClose = () => {
         setAnchorEl(null);
     };
-    const navigate = useNavigate();
     
     return (
         <>
@@ -36,8 +35,7 @@ export default function SignedInMenu() {
             <MenuItem component={Link} href='/orders'>My orders</MenuItem>
             <MenuItem onClick={() => {
                 dispatch(signOut());
-                //dispatch(clearBasket());
-                navigate('/');
+                dispatch(clearBasket());
             }}>Logout</MenuItem>
         </Menu>
     </>
