@@ -1,12 +1,11 @@
-import { createSlice } from "@reduxjs/toolkit";
-
+import { createSlice } from "@reduxjs/toolkit"
 
 export interface CounterState {
     data: number;
     title: string;
 }
 
-const initialState : CounterState = {
+const initialState: CounterState = {
     data: 42,
     title: 'YARC (yet another redux counter with redux toolkit)'
 }

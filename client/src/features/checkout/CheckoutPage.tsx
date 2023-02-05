@@ -4,12 +4,12 @@ import { FieldValues, FormProvider, useForm } from "react-hook-form";
 import AddressForm from "./AddressForm";
 import PaymentForm from "./PaymentForm";
 import Review from "./Review";
-import { yupResolver } from '@hookform/resolvers/yup';
+import {yupResolver} from '@hookform/resolvers/yup';
 import { validationSchema } from "./checkoutValidation";
 import agent from "../../app/api/agent";
 import { clearBasket } from "../basket/basketSlice";
 import { LoadingButton } from "@mui/lab";
-import { useAppDispatch} from "../../app/store/configureStore";
+import { useAppDispatch } from "../../app/store/configureStore";
 
 const steps = ['Shipping address', 'Review your order', 'Payment details'];
 
@@ -120,5 +120,6 @@ export default function CheckoutPage() {
                 </>
             </Paper>
         </FormProvider>
+
     );
 }

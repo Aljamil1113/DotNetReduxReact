@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice, isAnyOf } from "@reduxjs/toolkit";
 import { FieldValues } from "react-hook-form";
 import { toast } from "react-toastify";
+import { history } from "../..";
 import agent from "../../app/api/agent";
 import { User } from "../../app/models/user";
 import { setBasket } from "../basket/basketSlice";
@@ -19,7 +20,7 @@ export const signInUser = createAsyncThunk<User, FieldValues>(
         try {
             const userDto = await agent.Account.login(data);
             const {basket, ...user} = userDto;
-            if(basket) thunkAPI.dispatch(setBasket(basket));
+            if (basket) thunkAPI.dispatch(setBasket(basket));
             localStorage.setItem('user', JSON.stringify(user));
             return user;
         } catch (error: any) {
@@ -35,7 +36,7 @@ export const fetchCurrentUser = createAsyncThunk<User>(
         try {
             const userDto = await agent.Account.currentUser();
             const {basket, ...user} = userDto;
-            if(basket) thunkAPI.dispatch(setBasket(basket));
+            if (basket) thunkAPI.dispatch(setBasket(basket));
             localStorage.setItem('user', JSON.stringify(user));
             return user;
         } catch (error: any) {
@@ -44,7 +45,7 @@ export const fetchCurrentUser = createAsyncThunk<User>(
     },
     {
         condition: () => {
-            if(!localStorage.getItem('user')) return false;
+            if (!localStorage.getItem('user')) return false;
         }
     }
 )
@@ -56,6 +57,7 @@ export const accountSlice = createSlice({
         signOut: (state) => {
             state.user = null;
             localStorage.removeItem('user');
+            history.push('/');
         },
         setUser: (state, action) => {
             state.user = action.payload;
@@ -66,14 +68,14 @@ export const accountSlice = createSlice({
             state.user = null;
             localStorage.removeItem('user');
             toast.error('Session expired - please login again');
-        })
+            history.push('/');
+        });
         builder.addMatcher(isAnyOf(signInUser.fulfilled, fetchCurrentUser.fulfilled), (state, action) => {
             state.user = action.payload;
         });
-
-        builder.addMatcher(isAnyOf(signInUser.rejected, fetchCurrentUser.rejected), (state, action) => {
+        builder.addMatcher(isAnyOf(signInUser.rejected), (state, action) => {
             throw action.payload;
-        });
+        })
     })
 })
 
