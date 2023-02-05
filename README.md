@@ -29,3 +29,7 @@ npm install @reduxjs/toolkit
 npm install react-hook-form 
 
 regexlib.com
+
+
+npm install react-hook-form@7.13.0
+npm install @hookform/resolvers yup

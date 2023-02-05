@@ -85,8 +85,11 @@ namespace RestoreAPI.Controllers
 
             if(orderDto.SaveAddress)
             {
-                var user = await context.Users.FirstOrDefaultAsync(x => x.UserName == User.Identity.Name);
-                user.Address = new UserAddress
+                var user = await context.Users
+                    .Include(a => a.Address)
+                    .FirstOrDefaultAsync(x => x.UserName == User.Identity.Name);
+
+                var Address = new UserAddress
                 {
                     FullName = order.ShippingAddress.FullName,
                     Address1 = order.ShippingAddress.Address1,
@@ -96,6 +99,7 @@ namespace RestoreAPI.Controllers
                     Zip = order.ShippingAddress.Zip,
                     Country = order.ShippingAddress.Country,
                 };
+                user.Address = Address;
                 context.Update(user);
             }
 

@@ -1,5 +1,6 @@
-import { Button, Link, Menu, MenuItem } from "@mui/material";
+import { Button, Fade, Menu, MenuItem } from "@mui/material";
 import React from "react";
+import { Link } from "react-router-dom";
 import { signOut } from "../../features/account/accountSlice";
 import { clearBasket } from "../../features/basket/basketSlice";
 import { useAppDispatch, useAppSelector } from "../store/configureStore";
@@ -29,10 +30,10 @@ export default function SignedInMenu() {
             anchorEl={anchorEl}
             open={open}
             onClose={handleClose}
-            //TransitionComponent={Fade}
+            TransitionComponent={Fade}
         >
             <MenuItem onClick={handleClose}>Profile</MenuItem>
-            <MenuItem component={Link} href='/orders'>My orders</MenuItem>
+            <MenuItem component={Link} to='/orders'>My orders</MenuItem>
             <MenuItem onClick={() => {
                 dispatch(signOut());
                 dispatch(clearBasket());

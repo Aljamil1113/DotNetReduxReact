@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using RestoreAPI.Data;
 using RestoreAPI.DTOs;
 using RestoreAPI.Entities;
+using RestoreAPI.Entities.OrderAggregate;
 using RestoreAPI.Extensions;
 using RestoreAPI.Services;
 
@@ -88,6 +89,14 @@ namespace RestoreAPI.Controllers
                 Basket = userBasket?.MapBasketToDto()
             };
                
+        }
+
+        [Authorize]
+        [HttpGet("savedAddresss")]
+        public async Task<ActionResult<UserAddress>> GetSavedAddress()
+        {
+            return await userManager.Users.Where(x => x.UserName == User.Identity.Name)
+                .Select(user => user.Address).FirstOrDefaultAsync();
         }
 
         private async Task<Basket> RetrieveBasket(string buyerId)
