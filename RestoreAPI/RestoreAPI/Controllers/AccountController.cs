@@ -92,7 +92,7 @@ namespace RestoreAPI.Controllers
         }
 
         [Authorize]
-        [HttpGet("savedAddresss")]
+        [HttpGet("savedAddress")]
         public async Task<ActionResult<UserAddress>> GetSavedAddress()
         {
             return await userManager.Users.Where(x => x.UserName == User.Identity.Name)

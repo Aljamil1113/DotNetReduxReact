@@ -33,3 +33,7 @@ regexlib.com
 
 npm install react-hook-form@7.13.0
 npm install @hookform/resolvers yup
+
+# REACT STRIPE
+
+npm install --save @stripe/react-stripe-js @stripe/stripe-js

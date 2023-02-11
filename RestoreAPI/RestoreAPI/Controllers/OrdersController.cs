@@ -78,6 +78,7 @@ namespace RestoreAPI.Controllers
                 ShippingAddress = orderDto.ShippingAddress,
                 SubTotal = subtotal,
                 DeliveryFee = deliveryFee,
+                PaymentIntentId = basket.PaymentIntentId
             };
 
             context.Orders.Add(order);
