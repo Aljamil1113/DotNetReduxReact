@@ -37,3 +37,7 @@ npm install @hookform/resolvers yup
 # REACT STRIPE
 
 npm install --save @stripe/react-stripe-js @stripe/stripe-js
+
+npm install react-slick @types/react-slick slick-carousel
+
+npm run build
