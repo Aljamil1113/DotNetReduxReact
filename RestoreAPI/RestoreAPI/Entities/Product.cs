@@ -11,6 +11,7 @@
         public string Type { get; set; }
         public string Brand { get; set; }
         public int QuantityStock { get; set; }
+        public string PublicId { get; set; }
 
     }
 }
