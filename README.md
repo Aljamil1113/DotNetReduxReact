@@ -41,3 +41,5 @@ npm install --save @stripe/react-stripe-js @stripe/stripe-js
 npm install react-slick @types/react-slick slick-carousel
 
 npm run build
+
+npm install react-dropzone@11.4.2
